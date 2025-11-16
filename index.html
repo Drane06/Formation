@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formation IA - Style Amiral</title>
+
+    <!-- Police Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Icones Font Awesome (Nécessaire pour le style Amiral) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJ8D8D88W6dFCEzE8I/k7j60Y0wXpW2N65eY/q8fFpC35K7Jd2K1O8gX7gZJ8Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* --- PALETTE & BASE (Style Amiral Amélioré) --- */
+        :root {
+            --amiral-blue-dark: #0A3D62; /* Bleu foncé principal (Texte, Hero) */
+            --amiral-cyan: #0672A4;      /* Cyan (Accents, liens) */
+            --amiral-teal: #00A69D;      /* Teal (Tuile active, icônes) */
+            --amiral-accent-orange: #F47216; /* ACCENT ORANGE VIF */
+            --amiral-light-bg: #F7F9FA;  /* Fond de page très clair */
+            --amiral-card-bg: #FFFFFF;    /* Fond des tuiles */
+            --amiral-text-dark: #2C3E50; /* Texte général */
+            --amiral-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
+            --amiral-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--amiral-text-dark);
+            background: var(--amiral-light-bg);
+            min-height: 100vh;
+        }
+
+        a {
+            color: var(--amiral-cyan);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        a:hover {
+            color: var(--amiral-teal);
+            text-decoration: underline;
+        }
+
+        /* --- STRUCTURE & HEADER --- */
+        .hero {
+            background: linear-gradient(135deg, var(--amiral-blue-dark), var(--amiral-cyan));
+            color: white;
+            padding: 60px 20px 70px 20px; /* Ajusté pour logo */
+            text-align: center;
+            border-bottom: 5px solid var(--amiral-accent-orange);
+            position: relative; /* Pour positionner le logo */
+        }
+        
+        .hero-logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 120px; /* Ajustez la taille si besoin */
+            height: auto;
+            opacity: 0.9;
+        }
+
+        .hero h1 {
+            font-size: 2.8em;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.2;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto 50px;
+            padding: 0 20px;
+        }
+                
+        /* FIX Z-INDEX: Ajout de position: relative et z-index pour s'assurer que la carte est au-dessus du Hero */
+        .section-card:first-child {
+            margin-top: -30px; /* Fait chevaucher la bannière */
+            position: relative; /* Établit un contexte d'empilement */
+            z-index: 10;        /* Assure que la carte est par-dessus les éléments précédents */
+        }
+
+        /* --- PROGRESS BAR --- */
+        .progress-wrapper {
+             position: sticky;
+             top: 0;
+             height: 5px;
+             z-index: 999;
+             background-color: #eee;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--amiral-accent-orange);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 0 2px 2px 0;
+        }
+
+        /* --- TUILES (SECTION CARD) --- */
+        .section-card {
+            background: var(--amiral-card-bg);
+            border-radius: 16px; /* Plus arrondi */
+            margin-bottom: 30px;
+            /* Utilisation de filter: drop-shadow pour une ombre plus naturelle */
+            filter: drop-shadow(var(--amiral-shadow));
+            overflow: hidden;
+            transition: filter 0.3s ease, transform 0.3s ease;
+            border: 1px solid #E5E7EB; /* Bordure subtile */
+        }
+        .section-card:hover {
+            filter: drop-shadow(var(--amiral-shadow-hover));
+            transform: translateY(-2px); /* Léger soulèvement */
+        }
+
+        /* En-tête de Tuile */
+        .section-header {
+            display: grid;
+            grid-template-columns: auto 1fr auto; /* Icône | Contenu | Flèche */
+            align-items: center; /* Alignement vertical central */
+            padding: 25px 35px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            position: relative;
+        }
+        /* Ligne de survol subtile */
+        .section-header::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -3px; /* Aligné avec la bordure */
+            width: 0;
+            height: 3px;
+            background-color: var(--amiral-accent-orange);
+            transition: width 0.3s ease;
+        }
+        .section-header:hover::before {
+            width: 100%;
+        }
+                
+        /* État "Ouvert" */
+        .section-card.expanded .section-header {
+            background: var(--amiral-teal);
+            color: white;
+            border-bottom-color: var(--amiral-accent-orange);
+        }
+        .section-card.expanded .section-header:hover::before {
+            width: 0; /* Pas d'effet de survol quand ouvert */
+        }
+        .section-card.expanded .section-header:hover {
+            background: #009A91; /* Légèrement plus clair au survol (ouvert) */
+        }
+
+        /* Icônes de Tuile */
+        .section-header i.amiral-icon {
+            font-size: 2.5em; 
+            margin-right: 25px; 
+            color: var(--amiral-teal);
+            transition: color 0.3s ease, transform 0.3s ease;
+            transform: scale(1);
+        }
+        .section-card.expanded .section-header i.amiral-icon {
+            color: white; /* Changé pour blanc pour contraster */
+            transform: scale(1.1);
+        }
+
+        /* Contenu du titre (au centre de la grille) */
+        .section-header-content {
+            /* RAS */
+        }
+
+        /* Numéro de Section */
+        .section-number {
+            font-size: 0.8em;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--amiral-cyan);
+            opacity: 0.8;
+        }
+        .section-card.expanded .section-number {
+            color: var(--amiral-accent-orange);
+            opacity: 1;
+        }
+
+        /* Titre de Section */
+        .section-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }             
+        .section-meta {
+            font-size: 0.9em;
+            opacity: 0.8;
+            color: var(--amiral-text-dark);
+        }
+        .section-card.expanded .section-meta {
+            color: white;
+            opacity: 0.9;
+        }
+
+        /* Toggle Arrow */
+        .section-toggle {
+            font-size: 1.5em;
+            color: var(--amiral-teal);
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.3s ease;
+            margin-left: 20px;
+        }
+        .section-card.expanded .section-toggle {
+            transform: rotate(180deg);
+            color: var(--amiral-accent-orange);
+        }
+
+        /* Contenu de la Tuile */
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+            padding: 0 35px;
+        }
+        .section-card.expanded .section-content {
+            max-height: 15000px; /* Augmenté pour sécurité */
+            padding: 30px 35px;
+        }
+
+        /* --- BLOCS D'INFORMATION (CADRE & INFO BOX) --- */
+        .cadre {
+            background: #EAF8F8;
+            color: var(--amiral-blue-dark);
+            padding: 25px;
+            border-radius: 12px; /* Plus arrondi */
+            margin-bottom: 25px;
+            border-left: 6px solid var(--amiral-teal);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        }
+
+        .cadre h3 {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            color: var(--amiral-teal);
+        }                
+        .cadre ul { list-style: none; padding-left: 0; }
+        .cadre li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+        .cadre li::before {
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            content: "\f0c1"; /* Icône lien */
+            position: absolute;
+            left: 0;
+            color: var(--amiral-cyan);
+            top: 2px;
+        }
+
+        .ref-badge {
+            background: var(--amiral-cyan);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 6px; /* Plus arrondi */
+            font-size: 0.8em;
+            cursor: pointer;
+            margin-left: 5px;
+            font-weight: 600;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .ref-badge:hover { 
+            background: var(--amiral-blue-dark); 
+            transform: translateY(-1px);
+        }
+
+        .info-box {
+            padding: 20px;
+            border-radius: 10px; /* Plus arrondi */
+            margin: 20px 0;
+            border-left: 5px solid;
+            font-size: 0.95em;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        }
+        .info-formateur { 
+            background: #FFFBF0; 
+            border-color: var(--amiral-accent-orange);
+            color: #92400E; 
+        }
+        .info-learning { 
+            background: #F0F4FF; 
+            border-color: var(--amiral-cyan);
+            color: var(--amiral-blue-dark); 
+        }
+        .info-warning { 
+            background: #FFF0F0; 
+            border-color: #E53E3E;
+            color: #C53030; /* Plus foncé pour contraste */
+        }
+
+        .learning-list { list-style: none; padding-left: 0; }
+        .learning-list li { 
+            padding: 8px 0 8px 30px; /* Plus d'espace */
+            border-bottom: 1px dashed rgba(10, 61, 98, 0.1); 
+            position: relative;
+        }
+        .learning-list li span {
+            position: absolute;
+            left: 0;
+            top: 10px; /* Ajusté */
+            color: var(--amiral-cyan);
+            font-size: 1.2em; /* Icône plus grande */
+        }
+        .learning-list li:last-child { border-bottom: none; }
+
+        /* --- BOUTONS ET PROMPTS --- */
+        .reveal-btn {
+            background: var(--amiral-accent-orange);
+            color: white;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px; /* Plus arrondi */
+            font-weight: 700;
+            font-size: 1em;
+            cursor: pointer;
+            /* Ombre 3D améliorée */
+            box-shadow: 0 5px 0px #CC5E12, 0 8px 10px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            display: flex; 
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            transition: all 0.15s ease-out;
+        }
+        .reveal-btn i { margin-right: 10px; font-size: 1.1em; }
+
+        .reveal-btn:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 7px 0px #CC5E12, 0 10px 12px rgba(0,0,0,0.15); 
+            filter: brightness(1.05);
+        }
+        .reveal-btn:active { 
+            transform: translateY(4px); 
+            box-shadow: 0 1px 0px #CC5E12, 0 2px 4px rgba(0,0,0,0.1); 
+            filter: brightness(0.95);
+        }
+
+        .reveal-btn.used {
+            background: var(--amiral-blue-dark);
+            color: white;
+            box-shadow: 0 5px 0px #083451, 0 8px 10px rgba(0,0,0,0.1);
+            cursor: default;
+        }
+        .reveal-btn.used:hover { 
+            transform: translateY(-2px); /* Garder l'effet de survol */
+            box-shadow: 0 7px 0px #083451, 0 10px 12px rgba(0,0,0,0.15); 
+        }
+        .reveal-btn.used:active { 
+            transform: translateY(4px); 
+            box-shadow: 0 1px 0px #083451, 0 2px 4px rgba(0,0,0,0.1); 
+        }
+
+        /* Demo Box */
+        .demo-box {
+            display: none;
+            background: #f7f9fa;
+            border: 1px solid #D5E1E9;
+            border-radius: 12px; /* Plus arrondi */
+            padding: 30px;
+            margin: 25px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            animation: fadeIn 0.4s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .demo-box.active { display: block; }
+        
+        .demo-box h4 {
+            color: var(--amiral-teal);
+            border-bottom: 2px solid var(--amiral-accent-orange);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex; align-items: center;
+            font-size: 1.4em; /* Plus grand */
+        }
+        .demo-box h4 i { margin-right: 12px; font-size: 1.2em; }
+
+        /* Prompt Toggle - Rendu visible pour le clic */
+        .prompt-toggle {
+            background: var(--amiral-cyan);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px; /* Plus arrondi */
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            margin: 15px 0;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .prompt-toggle:hover { 
+            background: var(--amiral-teal); 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        /* Prompt Box (Boîte de Code/Texte) */
+        .prompt-box {
+            display: none; /* TRÈS IMPORTANT : CACHÉ PAR DÉFAUT */
+            background: #2D3748; /* Fond sombre */
+            color: #EDF2F7;
+            padding: 25px;
+            border-radius: 10px; /* Plus arrondi */
+            margin: 20px 0;
+            position: relative;
+            font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+            line-height: 1.6;
+            font-size: 0.95em;
+            white-space: pre-wrap;
+            word-break: break-word;
+            animation: fadeIn 0.3s ease;
+        }
+        .prompt-box.show { display: block; } /* AFFICHÉ AU CLIC */
+
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--amiral-accent-orange);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85em;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background 0.2s ease;
+        }
+        .copy-btn:hover {
+            background: #D96413; /* Plus foncé */
+        }
+
+        /* Tool Links */
+        .tool-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 15px 0 25px 0;
+        }
+        /* Style bulle appliqué aux boutons outils */
+        .tool-btn {
+            padding: 10px 18px;
+            background: var(--amiral-cyan);
+            color: white;
+            border-radius: 25px; /* Forme pilule */
+            font-weight: 600;
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1); /* Ombre de bulle */
+            transition: all 0.2s;
+            text-decoration: none; /* Annuler le soulignement du hover */
+        }
+
+        .tool-btn:hover { 
+              background: var(--amiral-teal); 
+              transform: translateY(-2px); 
+              box-shadow: 0 5px 10px rgba(0,0,0,0.15); /* Effet de profondeur au survol */
+              text-decoration: none;
+        }
+
+        .badge {
+            font-size: 0.75em;
+            padding: 3px 8px;
+            border-radius: 5px;
+            margin-left: 5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            background: rgba(0,0,0,0.1);
+            color: white;
+        }
+        .badge-free { background: var(--amiral-teal); }
+        .badge-french { background: #0055A4; } /* Bleu drapeau FR */
+        .badge-freemium { background: var(--amiral-blue-dark); }
+        
+        .highlight { 
+            background: var(--amiral-accent-orange);
+            color: white;
+            padding: 2px 6px; 
+            border-radius: 4px; 
+            font-weight: 700; 
+        }
+        .font-bold { font-weight: 800; color: var(--amiral-teal); }              
+        
+        /* --- MODAL (Référence MEN) --- */
+        .modal {
+            display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
+            animation: fadeInModal 0.3s ease;
+        }
+        .modal.show { display: block; }
+        @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
+        
+        .modal-content {
+            background-color: var(--amiral-card-bg); margin: 10% auto; padding: 30px;
+            border-radius: 16px; width: 90%; max-width: 550px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+            animation: slideInModal 0.3s ease-out;
+        }
+        .modal-header { 
+            border-bottom: 2px solid var(--amiral-teal); 
+            padding-bottom: 12px; 
+            margin-bottom: 20px; 
+            display: flex; justify-content: space-between; align-items: center; 
+        }
+        #modal-title { color: var(--amiral-teal); font-size: 1.6em; font-weight: 700; }
+        .modal-close { 
+            color: #aaa; 
+            font-size: 32px; 
+            font-weight: bold; 
+            border: none; background: none; 
+            cursor: pointer; 
+            transition: color 0.2s, transform 0.2s;
+        }
+        .modal-close:hover { color: var(--amiral-blue-dark); transform: rotate(90deg); }
+        
+        @keyframes slideInModal { from { transform: translateY(-80px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+
+        #modal-body blockquote {
+            background: var(--amiral-light-bg);
+            border-left: 5px solid var(--amiral-cyan);
+            padding: 15px 20px;
+            margin: 0;
+            font-size: 1.1em;
+            font-style: italic;
+            color: var(--amiral-text-dark);
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .hero { padding-top: 80px; } /* Plus d'espace pour le logo */
+            .hero-logo { width: 80px; top: 15px; left: 15px; }
+            .hero h1 { font-size: 2.2em; }
+            
+            .section-title { font-size: 1.5em; }
+            .section-header { 
+                grid-template-columns: 1fr auto; /* Retirer l'icône de la grille pour le mobile */
+                padding: 20px 25px; 
+                flex-direction: column; 
+                align-items: flex-start; 
+            }
+            .section-header i.amiral-icon { 
+                /* L'icône est retirée du flux principal sur mobile pour simplifier l'alignement */
+                display: none; 
+            }
+            .section-header-content { width: 100%; }
+            .section-meta { margin-top: 10px; }
+            .section-card.expanded .section-content { padding: 20px; }
+            .section-toggle { margin-top: 10px; align-self: flex-end; margin-left: 0; }
+            
+            .reveal-btn { padding: 12px 20px; }
+            .tool-btn { padding: 8px 14px; font-size: 0.9em; }
+            .modal-content { margin-top: 20%; width: 95%; }
+        }
+        /* Rétablissement de l'icône sur desktop (au cas où) */
+        @media (min-width: 769px) {
+            .section-header i.amiral-icon {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Barre de progression -->
+    <div class="progress-wrapper">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Section Héro -->
+    <div class="hero">
+        <!-- LOGO AJOUTÉ -->
+        <img src="https://storage.googleapis.com/static.invert-canvas.com/static/Logo%20DRANE%202025%20simplifi%C3%A9%20(1).png" alt="Logo DRANE PACA" class="hero-logo">
+
+        <div class="hero-content">
+            <h1>Formation IA découverte: connaître et savoir utiliser des IA génératives.</h1>
+            <p style="font-size: 1.1em; opacity: 0.95; margin-top: 15px;">Apprendre en faisant : construire une séquence pédagogique tout en s'acculturant à l'IA</p>
+            <p style="font-size: 0.8em; margin-top: 10px; opacity: 0.9;">DRANE PACA - Académie de Nice | 2025</p>
+        </div>
+    </div>
+
+    <!-- Conteneur principal -->
+    <div class="container">
+
+        <!-- Tuile Intro -->
+        <div class="section-card" id="intro">
+            <div class="section-header" onclick="toggleSection(this)">
+                <i class="amiral-icon fas fa-chalkboard-teacher"></i> 
+                <div class="section-header-content">
+                    <div class="section-number">INTRODUCTION</div>
+                    <h2 class="section-title">Objectif de la formation</h2>
+                    <div class="section-meta">
+                        <span><i class="fas fa-book-open"></i> Fil rouge pédagogique</span>
+                    </div>
+                </div>
+                <div class="section-toggle"><i class="fas fa-chevron-down"></i></div>
+            </div>
+            <div class="section-content">
+                <div class="cadre">
+                    <h3>🎯 Objectif fil rouge</h3>
+                    <p style="font-size: 1.1em; line-height: 1.8;">
+                        <strong class="highlight">Construire ensemble une séquence pédagogique sur "L'IA et ses enjeux sociétaux"
+                        tout en s'acculturant à l'IA</strong>
+                    </p>
+                </div>
+
+                <div class="info-learning info-box">
+                    <p><strong>💡 Principe pédagogique :</strong> Cette formation alterne <strong style="color: var(--amiral-blue-dark);">théorie et pratique</strong> : chaque concept est immédiatement illustré par une démonstration concrète. Vous apprendrez à utiliser l'IA en l'utilisant !</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tuile Partie 1 -->
+        <div class="section-card" id="partie1">
+            <div class="section-header" onclick="toggleSection(this)">
+                <i class="amiral-icon fas fa-history"></i>
+                <div class="section-header-content">
+                    <div class="section-number">PARTIE 1</div>
+                    <h2 class="section-title">Découverte & Histoire de l'IA</h2>
+                    <div class="section-meta">
+                        <span><i class="fas fa-magic"></i> 4 démonstrations</span>
+                    </div>
+                </div>
+                <div class="section-toggle"><i class="fas fa-chevron-down"></i></div>
+            </div>
+            <div class="section-content">
+                <!-- CADRE MEN MIS À JOUR -->
+                <div class="cadre">
+                    <h3>Cadre d'usage de l'IA en éducation.</h3>
+                    <p style="margin-bottom: 15px;">Ce document vise à fournir un cadre clair pour l'utilisation de l'intelligence artificielle dans le domaine de l'éducation en France. Il aborde les potentialités, les risques, les limites et les obligations légales et éthiques liées à l'IA, en particulier l'IA générative. L'usage de l'IA en éducation est autorisé, à condition de respecter le cadre défini. 
+                        <a href="https://www.pedagogie.ac-nice.fr/dane/s-informer/cadre-de-reference-de-l-ia-en-education" target="_blank" style="font-weight: 700; text-decoration: underline;">Consultez le document complet.</a>
+                    </p>
+                    <ul>
+                        <li><strong style="color: var(--amiral-blue-dark);">L'enseignant reste responsable des contenus utilisés</strong>
+                            <span class="ref-badge" onclick="openModal('ref1')">Cadre MEN p.3</span>
+                        </li>
+                        <li><strong style="color: var(--amiral-blue-dark);">L'IA peut assister mais jamais remplacer</strong>
+                            <span class="ref-badge" onclick="openModal('ref2')">Cadre MEN p.8</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Démo 1 -->
+                <button class="reveal-btn" onclick="revealDemo('demo1-1', this)"><i class="fas fa-laptop-code"></i> Afficher Démo 1 (Texte simple)</button>
+                <div id="demo1-1" class="demo-box">
+                    <h4><i class="fas fa-robot"></i> Démo 1 : Premier contact sans compte</h4>
+                    <div class="tool-links">
+                        <a href="https://duckduckgo.com/?q=DuckDuckGo&ia=chat" target="_blank" class="tool-btn">
+                            <i class="fas fa-search"></i> DuckDuckGo AI
+                            <span class="badge badge-free">Gratuit</span>
+                        </a>
+                        <a href="https://chat.mistral.ai/" target="_blank" class="tool-btn">
+                            <i class="fas fa-flag"></i> Mistral Chat
+                            <span class="badge badge-french">Français</span>
+                        </a>
+                    </div>
+                    <button class="prompt-toggle" onclick="togglePrompt('prompt1')"><i class="fas fa-comment-alt"></i> Afficher le prompt</button>
+                    <div id="prompt1" class="prompt-box">
+                        <button class="copy-btn" onclick="copyText('prompt1-text')"><i class="fas fa-copy"></i> Copier</button>
+                        <div id="prompt1-text">Explique en 150 mots maximum l'histoire de l'intelligence artificielle, de ses origines à aujourd'hui, pour des enseignants du secondaire.</div>
+                    </div>
+                </div>
+
+                <!-- Démo 2 -->
+                <button class="reveal-btn" onclick="revealDemo('demo1-2', this)"><i class="fas fa-laptop-code"></i> Afficher Démo 2 (Prompt structuré)</button>
+                <div id="demo1-2" class="demo-box">
+                    <h4><i class="fas fa-magic"></i> Démo 2 : Prompt amélioré avec structure</h4>
+                    <div class="tool-links">
+                        <a href="https://chat.openai.com" target="_blank" class="tool-btn">
+                            <i class="fas fa-brain"></i> ChatGPT
+                            <span class="badge badge-freemium">Freemium</span>
+                        </a>
+                        <a href="https://claude.ai" target="_blank" class="tool-btn">
+                            <i class="fas fa-comments"></i> Claude
+                            <span class="badge badge-freemium">Freemium</span>
+                        </a>
+                    </div>
+                    <button class="prompt-toggle" onclick="togglePrompt('prompt2')"><i class="fas fa-comment-alt"></i> Afficher le prompt amélioré</button>
+                    <div id="prompt2" class="prompt-box">
+                        <button class="copy-btn" onclick="copyText('prompt2-text')"><i class="fas fa-copy"></i> Copier</button>
+                        <div id="prompt2-text">En tant qu'historien des sciences, crée une chronologie de l'intelligence artificielle de 1950 à 2024, avec 8 dates clés. 
+Pour chaque date : Date | Événement | Impact
+Format tableau avec colonnes claires.</div>
+                    </div>
+                </div>
+
+                <!-- Démo 3 -->
+                <button class="reveal-btn" onclick="revealDemo('demo1-3', this)"><i class="fas fa-laptop-code"></i> Afficher Démo 3 (Visualisation)</button>
+                <div id="demo1-3" class="demo-box">
+                    <h4><i class="fas fa-map-marked-alt"></i> Démo 3 : Visualisation automatisée</h4>
+                    <div class="tool-links">
+                        <a href="https://mymarkmap.vercel.app/" target="_blank" class="tool-btn">
+                            <i class="fas fa-sitemap"></i> MyMarkmap
+                            <span class="badge badge-free">Gratuit</span>
+                        </a>
+                    </div>
+                    <button class="prompt-toggle" onclick="togglePrompt('prompt-markmap')"><i class="fas fa-comment-alt"></i> Afficher le prompt</button>
+                    <div id="prompt-markmap" class="prompt-box">
+                        <button class="copy-btn" onclick="copyText('prompt-markmap-text')"><i class="fas fa-copy"></i> Copier</button>
+                        <div id="prompt-markmap-text">Colle le texte de chronologie obtenu précédemment et transforme-le en format markdown pour carte mentale.</div>
+                    </div>
+                    <p>Transformer le texte en carte mentale visuelle.</p>
+                </div>
+                
+                <!-- Démo 4 -->
+                <button class="reveal-btn" onclick="revealDemo('demo1-4', this)"><i class="fas fa-laptop-code"></i> Afficher Démo 4 (Création d'images)</button>
+                <div id="demo1-4" class="demo-box">
+                    <h4><i class="fas fa-image"></i> Démo 4 : Création d'images IA (Gratuit vs. Avancé)</h4>
+                    <p>Comparer la qualité et la rapidité entre un outil gratuit et un modèle avancé.</p>
+                    <div class="tool-links">
+                        <a href="https://www.craiyon.com/" target="_blank" class="tool-btn">
+                            <i class="fas fa-paint-brush"></i> Craiyon
+                            <span class="badge badge-free">Gratuit (Sans compte)</span>
+                        </a>
+                        <!-- LIEN GEMINI CORRIGÉ -->
+                        <a href="https://gemini.google/fr/overview/image-generation/?hl=fr" target="_blank" class="tool-btn">
+                            <i class="fas fa-gem"></i> Gemini
+                            <span class="badge badge-freemium">Compte Google</span>
+                        </a>
+                    </div>
+                    <button class="prompt-toggle" onclick="togglePrompt('prompt-image')"><i class="fas fa-comment-alt"></i> Afficher le prompt</button>
+                    <div id="prompt-image" class="prompt-box">
+                        <button class="copy-btn" onclick="copyText('prompt-image-text')"><i class="fas fa-copy"></i> Copier</button>
+                        <div id="prompt-image-text">Un professeur d'histoire médiévale, en pleine réflexion, assis dans une bibliothèque futuriste éclairée par des néons. Style : peinture à l'huile cyberpunk.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tuile Focus Prompt -->
+        <div class="section-card" id="prompt">
+            <div class="section-header" onclick="toggleSection(this)">
+                <i class="amiral-icon fas fa-key"></i>
+                <div class="section-header-content">
+                    <div class="section-number">FOCUS TECHNIQUE</div>
+                    <h2 class="section-title">Maîtriser le Prompt Engineering</h2>
+                    <div class="section-meta">
+                        <span><i class="fas fa-tools"></i> Compétence clé</span>
+                    </div>
+                </div>
+                <div class="section-toggle"><i class="fas fa-chevron-down"></i></div>
+            </div>
+            <div class="section-content">
+                <div class="cadre">
+                    <h3>💡 Qu'est-ce qu'un bon prompt ?</h3>
+                    <p style="font-size: 1.1em; line-height: 1.8;">
+                        Le <strong class="highlight">prompt engineering</strong> est l'art de formuler des instructions claires pour obtenir les meilleurs résultats. C'est une compétence essentielle à maîtriser et à transmettre aux élèves.
+                    </p>
+                </div>
+
+                <!-- PRINCIPES DU PROMPT MIS À JOUR -->
+                <div class="info-learning info-box">
+                    <h4 class="font-bold mb-20" style="color: var(--amiral-teal); font-size: 1.3em; margin-bottom: 15px;">🔑 Les 5 principes d'un bon prompt</h4>
+                    <ol style="padding-left: 20px; line-height: 1.8; font-size: 1.05em; list-style-type: none;">
+                        <li style="margin-bottom: 15px;"><strong style="color: var(--amiral-blue-dark); display: block; font-size: 1.1em;">RÔLE : Donner un rôle à l'IA</strong>
+                            <span style="display: block; font-size: 0.95em; opacity: 0.9;">Dites à l'IA "qui" elle est. Cela ajuste son ton et son niveau d'expertise.</span>
+                            <span style="display: block; font-size: 0.9em; font-style: italic; color: #555; margin-top: 5px;">Ex: "Tu es un professeur d'histoire pour le collège..."</span>
+                        </li>
+                        <li style="margin-bottom: 15px;"><strong style="color: var(--amiral-blue-dark); display: block; font-size: 1.1em;">CONTEXTE : Préciser le contexte</strong>
+                            <span style="display: block; font-size: 0.95em; opacity: 0.9;">Donnez-lui les informations de fond nécessaires pour comprendre la situation.</span>
+                            <span style="display: block; font-size: 0.9em; font-style: italic; color: #555; margin-top: 5px;">Ex: "...mes élèves de 4e viennent de terminer le chapitre sur les Lumières."</span>
+                        </li>
+                        <li style="margin-bottom: 15px;"><strong style="color: var(--amiral-blue-dark); display: block; font-size: 1.1em;">TÂCHE : Définir clairement la tâche</strong>
+                            <span style="display: block; font-size: 0.95em; opacity: 0.9;">Soyez explicite sur ce que vous attendez qu'elle produise.</span>
+                            <span style="display: block; font-size: 0.9em; font-style: italic; color: #555; margin-top: 5px;">Ex: "Crée une activité de 15 minutes pour introduire la Révolution française."</span>
+                        </li>
+                        <li style="margin-bottom: 15px;"><strong style="color: var(--amiral-blue-dark); display: block; font-size: 1.1em;">FORMAT : Spécifier le format</strong>
+                            <span style="display: block; font-size: 0.95em; opacity: 0.9;">Indiquez la forme que doit prendre la réponse (liste, tableau, paragraphe, etc.).</span>
+                            <span style="display: block; font-size: 0.9em; font-style: italic; color: #555; margin-top: 5px;">Ex: "Présente cela sous forme d'un QCM avec 3 questions et 4 choix de réponse."</span>
+                        </li>
+                        <li style="margin-bottom: 15px;"><strong style="color: var(--amiral-blue-dark); display: block; font-size: 1.1em;">CONTRAINTES : Ajouter des limites</strong>
+                            <span style="display: block; font-size: 0.95em; opacity: 0.9;">Fixez des règles pour affiner le résultat (longueur, ton, éléments à exclure).</span>
+                            <span style="display: block; font-size: 0.9em; font-style: italic; color: #555; margin-top: 5px;">Ex: "N'utilise pas de termes trop complexes. La bonne réponse doit être la B."</span>
+                        </li>
+                    </ol>
+                    <p style="margin-top: 20px; text-align: center;">
+                        <a href="https://novapeda.eu/genprompt" target="_blank" style="color: var(--amiral-cyan); font-weight: 600; text-decoration: underline;">🔗 Outil NovaPeda : Générateur de prompts</a>
+                    </p>
+                </div>
+
+
+                <button class="reveal-btn" onclick="revealDemo('prompt-exemples', this)"><i class="fas fa-chart-bar"></i> Afficher les exemples progressifs</button>
+                <div id="prompt-exemples" class="demo-box">
+                    <h4>📊 Exemples : De faible à excellent</h4>
+                    
+                    <div class="info-warning info-box">
+                        <strong style="color: #C53030; font-size: 1.1em;">❌ Prompt FAIBLE :</strong>
+                        <p style="font-style: italic; margin-top: 10px; font-size: 1.05em;">"Parle-moi de la Révolution française"</p>
+                        <p style="font-size: 0.95em; margin-top: 8px;">Problème : trop vague, pas de contexte, pas de format</p>
+                        
+                        <button class="prompt-toggle" onclick="togglePrompt('prompt-faible-ex')"><i class="fas fa-comment-alt"></i> Afficher le prompt</button>
+                        <div id="prompt-faible-ex" class="prompt-box">
+                            <button class="copy-btn" onclick="copyText('prompt-faible-text')"><i class="fas fa-copy"></i> Copier</button>
+                            <div id="prompt-faible-text">Parle-moi de la Révolution française</div>
+                        </div>
+                    </div>
+
+                    <div class="info-formateur info-box">
+                        <strong style="color: var(--amiral-accent-orange); font-size: 1.1em;">⚡ Prompt MOYEN :</strong>
+                        <p style="font-style: italic; margin-top: 10px; color: #92400E;">"Explique-moi les causes de la Révolution française pour des élèves de 4ème en 200 mots."</p>
+                        <p style="font-size: 0.95em; margin-top: 8px; color: #92400E;">Mieux : public cible et contrainte, mais manque de structure et de rôle</p>
+                        
+                        <button class="prompt-toggle" onclick="togglePrompt('prompt-moyen-ex')"><i class="fas fa-comment-alt"></i> Afficher le prompt moyen</button>
+                        <div id="prompt-moyen-ex" class="prompt-box">
+                            <button class="copy-btn" onclick="copyText('prompt-moyen-text')"><i class="fas fa-copy"></i> Copier</button>
+                            <div id="prompt-moyen-text">Explique-moi les causes de la Révolution française pour des élèves de 4ème en 200 mots.</div>
+                        </div>
+                    </div>
+
+                    <div class="info-learning info-box">
+                        <strong style="color: var(--amiral-teal); font-size: 1.1em;">✅ Prompt EXCELLENT :</strong>
+                        <p style="font-size: 0.95em; margin-top: 15px; color: var(--amiral-blue-dark);">Parfait : Rôle + Contexte + Tâche + Format + Contraintes</p>
+                        
+                        <button class="prompt-toggle" onclick="togglePrompt('prompt-bon')"><i class="fas fa-comment-alt"></i> Afficher le prompt excellent</button>
+                        <div id="prompt-bon" class="prompt-box show"> <!-- Laissé ouvert pour l'exemple -->
+                            <button class="copy-btn" onclick="copyText('prompt-bon-text')"><i class="fas fa-copy"></i> Copier</button>
+                            <div id="prompt-bon-text">En tant qu'enseignant d'histoire, crée une introduction à la Révolution française pour des élèves de 4e. 
+Objectif : Expliquer les causes principales en 200 mots max.
+Format : - Phrase d'accroche- 3 causes (politique, économique, sociale)- Conclusion ouverte
+Ton : Accessible et engageant</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tuile Partie 2 -->
+        <div class="section-card" id="partie2">
+            <div class="section-header" onclick="toggleSection(this)">
+                <i class="amiral-icon fas fa-cogs"></i>
+                <div class="section-header-content">
+                    <div class="section-number">PARTIE 2</div>
+                    <h2 class="section-title">Comprendre le fonctionnement</h2>
+                    <div class="section-meta">
+                        <span><i class="fas fa-lightbulb"></i> Biais & Hallucinations</span>
+                    </div>
+                </div>
+                <div class="section-toggle"><i class="fas fa-chevron-down"></i></div>
+            </div>
+            <div class="section-content">
+                <div class="cadre">
+                    <h3>📚 Cadre MEN</h3>
+                    <ul>
+                        <li><strong>Développer l'esprit critique des élèves</strong>
+                            <span class="ref-badge" onclick="openModal('ref6')">Cadre MEN p.7</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Démo 5 -->
+                <button class="reveal-btn" onclick="revealDemo('demo2-1', this)"><i class="fas fa-laptop-code"></i> Afficher Démo 5 (LLM)</button>
+                <div id="demo2-1" class="demo-box">
+                    <h4><i class="fas fa-network-wired"></i> Démo 5 : Comment fonctionne un LLM ?</h4>
+                    <div class="tool-links">
+                        <!-- LIEN VITTASCIENCE CORRIGÉ -->
+                        <a href="https://fr.vittascience.com/ia/text" target="_blank" class="tool-btn">
+                            <i class="fas fa-graduation-cap"></i> Vittascience
+                            <span class="badge badge-free">Gratuit</span>
+                        </a>
+                    </div>
+                    
+                    <!-- TEXTE MIS À JOUR -->
+                    <p style="font-size: 1.05em; line-height: 1.7; margin-bottom: 20px;">
+                        Vittascience est un très bon outils pour comprendre comment fonctionne un LLM comme ChatGpt par exemple.<br>
+                        Non, ChatGPT ne “réfléchit” pas comme un humain… même si ses réponses peuvent le laisser croire.<br><br>
+                        <strong style="color: var(--amiral-blue-dark);">Alors, comment ça marche vraiment ?</strong><br>
+                        On peut imaginer cela comme un jeu de devinettes : vous commencez une phrase, et le modèle cherche le mot le plus probable pour la continuer.<br>
+                        Il ne réfléchit pas : il réutilise ce qu’il a déjà appris et choisit la suite de texte la plus cohérente.<br>
+                        Ce n’est pas parce qu’il “comprend” comme nous, mais parce qu’il a observé des millions d’exemples de phrases.<br>
+                        Rien de magique donc : juste des calculs très rapides et très sophistiqués.<br><br>
+                        <strong style="color: var(--amiral-blue-dark);">Et pourquoi ses réponses varient-elles ?</strong><br>
+                        Parce qu’on ajoute une petite part de hasard contrôlé, ce qui l’empêche de répéter toujours la même phrase.<br>
+                        C’est ce qui donne l’impression d’un style, parfois même d’une personnalité, et rend ses réponses si naturelles.
+                    </p>
+
+                    <div class="info-learning info-box">
+                        <h4 class="font-bold mb-20" style="color: var(--amiral-teal);">🧠 Concepts clés</h4>
+                        <ul class="learning-list">
+                            <li><span style="color: var(--amiral-cyan);">🔸</span> <strong>Tokens :</strong> Découpage des mots</li>
+                            <li><span style="color: var(--amiral-cyan);">🔸</span> <strong>Prédiction :</strong> Mot suivant le plus probable</li>
+                            <li><span style="color: var(--amiral-cyan);">🔸</span> <strong>Entraînement :</strong> Milliards de textes</li>
+                            <li><span style="color: var(--amiral-cyan);">🔸</span> <strong>Date de coupure :</strong> Connaissances limitées</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-warning info-box">
+                        <strong>⚠️ Point crucial :</strong> L'IA n'est <strong>PAS</strong> intelligente au sens humain. Elle calcule des probabilités.
+                    </div>
+                </div>
+
+                <!-- Démo 6 -->
+                <button class="reveal-btn" onclick="revealDemo('demo2-2', this)"><i class="fas fa-laptop-code"></i> Afficher Démo 6 (Biais)</button>
+                <div id="demo2-2" class="demo-box">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Démo 6 : Les biais en action</h4>
+                    
+                    <!-- NOUVEAU TEXTE D'EXPLICATION SUR LES BIAIS -->
+                    <p style="font-size: 1.05em; line-height: 1.7; margin-bottom: 20px;">
+                        <strong style="color: var(--amiral-blue-dark);">Les biais dans les LLM proviennent des données d'entraînement</strong> qui reflètent les préjugés, stéréotypes et déséquilibres présents dans les textes humains collectés sur Internet et dans d'autres sources. 
+                        L'IA reproduit ainsi les schémas majoritaires ou dominants qu'elle a observés.
+                    </p>
+                    
+                    <div class="tool-links">
+                        <a href="https://perchance.org/ai-text-to-image-generator" target="_blank" class="tool-btn">
+                            <i class="fas fa-palette"></i> Perchance AI
+                            <span class="badge badge-free">Gratuit</span>
+                        </a>
+                    </div>
+                    <button class="prompt-toggle" onclick="togglePrompt('prompt-biais')"><i class="fas fa-comment-alt"></i> Prompt à tester</button>
+                    <div id="prompt-biais" class="prompt-box">
+                        <button class="copy-btn" onclick="copyText('prompt-biais-text')"><i class="fas fa-copy"></i> Copier</button>
+                        <div id="prompt-biais-text">Une équipe de médecins qui vient de faire une découverte majeure</div>
+                    </div>
+                    <p>Générer 5-6 fois et observer (genre, ethnie, âge).</p>
+                </div>
+
+                <!-- Cadre MEN Biais (Structure originelle) -->
+                <div class="cadre">
+                    <h3>📚 Cadre MEN sur les biais</h3>
+                    <p>"Les IA peuvent reproduire et amplifier des biais."
+                        <span class="ref-badge" onclick="openModal('ref7')">Cadre MEN p.7</span>
+                    </p>
+                </div>
+
+                <!-- Démo 7 -->
+                <button class="reveal-btn" onclick="revealDemo('demo2-3', this)"><i class="fas fa-laptop-code"></i> Afficher Démo 7 (Hallucinations)</button>
+                <div id="demo2-3" class="demo-box">
+                    <h4><i class="fas fa-skull-crossbones"></i> Démo 7 : Les hallucinations</h4>
+                    
+                    <!-- NOUVEAU TEXTE SUR LES STATISTIQUES D'HALLUCINATION -->
+                    <p style="font-size: 1.05em; line-height: 1.7; margin-bottom: 20px;">
+                        <strong style="color: var(--amiral-blue-dark);">Statistiques alarmantes (Août 2025) :</strong>
+                        <ul style="margin-left: 20px; list-style-type: disc;">
+                            <!-- MODIFICATION ICI : retrait des ** autour de 35% -->
+                            <li>Taux moyen de réponses contenant des fausses informations parmi les dix IA leaders : 35%, contre 18% un an auparavant.</li>
+                            <li>Sur certains benchmarks d’actualité : 
+                                <!-- MODIFICATION : Remplacement de la liste <ul> par des <br> pour retirer les puces -->
+                                <div style="margin-left: 20px; margin-top: 5px;">
+                                    ChatGPT: 40% de fausses réponses<br>
+                                    Perplexity: 46% de fausses réponses<br>
+                                    Copilot: 36% de fausses réponses<br>
+                                    Gemini: 16,67% de fausses réponses<br>
+                                    Claude: environ 10% de fausses réponses
+                                </div>
+                            </li>
+                        </ul>
+                    </p>
+                    
+                    <button class="prompt-toggle" onclick="togglePrompt('prompt-hallucination')"><i class="fas fa-comment-alt"></i> Prompt piège</button>
+                    <div id="prompt-hallucination" class="prompt-box">
+                        <button class="copy-btn" onclick="copyText('prompt-hallucination-text')"><i class="fas fa-copy"></i> Copier</button>
+                        <div id="prompt-hallucination-text">Quelle est la date exacte de la découverte de la planète Vénus par Galilée ? Donne-moi la source précise de cette découverte.</div>
+                    </div>
+                    <div class="info-warning info-box">
+                        <strong>⚠️ ALERTE :</strong> Galilée n'a <strong>PAS</strong> découvert Vénus ! L'IA peut inventer des dates et sources crédibles pour des faits inexacts.
+                    </div>
+                </div>
+
+                <!-- PANORAMA IA MIS À JOUR -->
+                <div class="info-learning info-box" style="margin-top: 40px;">
+                    <h4 class="font-bold mb-20" style="color: var(--amiral-teal); font-size: 1.3em; margin-bottom: 15px;">🧠 Panorama des grandes vagues de l’intelligence artificielle</h4>
+                    <p style="font-size: 1.05em; line-height: 1.7; margin-bottom: 20px;">
+                        L’IA est un domaine scientifique ancien, bien plus large que l’IA générative dont on parle beaucoup depuis 2023.
+                    </p>
+                    <ul class="learning-list">
+                        <li><span style="color: var(--amiral-cyan);">🔹</span> <strong>IA symbolique (50-80)</strong> : Règles logiques programmées : systèmes experts (diagnostic médical, aide à la décision), résolution de problèmes par règles. Deep Blue est un excellent exemple d’IA symbolique.</li>
+                        <li><span style="color: var(--amiral-cyan);">🔹</span> <strong>Apprentissage automatique (90-2010)</strong> : Apprendre à partir de très grandes quantités de données : filtrage de spams, recommandation de films, détection de fraude...</li>
+                        <li><span style="color: var(--amiral-cyan);">🔹</span> <strong>Deep Learning (2010+)</strong> : Réseaux de neurones profonds : reconnaissance d’images, traduction automatique, assistants vocaux.</li>
+                        <li><span style="color: var(--amiral-cyan);">🔹</span> <strong>IA génératives (2020+)</strong> : Création de contenus : texte avec tous les grands modèles de langage, images, musique et vidéo.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tuile Partie 3 -->
+        <div class="section-card" id="partie3">
+            <div class="section-header" onclick="toggleSection(this)">
+                <i class="amiral-icon fas fa-shield-alt"></i>
+                <div class="section-header-content">
+                    <div class="section-number">PARTIE 3</div>
+                    <h2 class="section-title">Cadre légal & Précautions</h2>
+                    <div class="section-meta">
+                        <span><i class="fas fa-lock"></i> RGPD & Environnement</span>
+                    </div>
+                </div>
+                <div class="section-toggle"><i class="fas fa-chevron-down"></i></div>
+            </div>
+            <div class="section-content">
+                <div class="cadre">
+                    <h3>📚 Protection des données (RGPD)</h3>
+                    <ul>
+                        <li><strong>Aucune donnée personnelle dans les IA grand public</strong>
+                            <span class="ref-badge" onclick="openModal('ref8')">Cadre MEN p.8</span>
+                        </li>
+                        <li><strong>Privilégier les outils sans compte et européens</strong> (ex: Mistral, IA souveraine française)
+                            <span class="ref-badge" onclick="openModal('ref9')">Cadre MEN p.4-5</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <button class="reveal-btn" onclick="revealDemo('demo3-1', this)"><i class="fas fa-laptop-code"></i> Afficher Démo 8 (Sécurité)</button>
+                <div id="demo3-1" class="demo-box">
+                    <h4><i class="fas fa-user-shield"></i> Démo 8 : Créer un compte générique</h4>
+                    <div class="info-learning info-box">
+                        <h4 class="font-bold mb-20" style="color: var(--amiral-teal);">✅ Checklist de sécurité</h4>
+                        <ul class="learning-list">
+                            <li><span style="color: var(--amiral-cyan);">✓</span> <strong>Compte générique :</strong> classe.taleamc.lyceexxx@gmail.com</li>
+                            <li><span style="color: var(--amiral-cyan);">✓</span> <strong>Pas de données personnelles</strong></li>
+                            <li><span style="color: var(--amiral-cyan);">✓</span> <strong>Ressources publiques uniquement</strong></li>
+                            <li><span style="color: var(--amiral-cyan);">✓</span> <strong>Vérifier les CGU</strong></li>
+                            <li><span style="color: var(--amiral-cyan);">✓</span> <strong>Informer élèves/parents</strong></li>
+                        </ul>
+                    </div>
+
+                    <!-- NOUVELLE ASTUCE AJOUTÉE CI-DESSOUS -->
+                    <div class="info-formateur info-box">
+                        <p style="line-height: 1.7;">
+                            <strong style="color: var(--amiral-accent-orange);">💡 Petite astuce !</strong><br>
+                            Mettre en place des alias pour la création de vos comptes tests renforce la sécurité de votre compte en limitant l’exposition de votre adresse principale et en réduisant les risques d’usurpation. Cela permet aussi de repérer facilement si votre adresse a été partagée ou compromise : si vous commencez à recevoir des messages sur un alias réservé à un seul service, vous savez immédiatement d’où provient la fuite.
+                        </p>
+                    </div>
+
+                    <div class="info-warning info-box">
+                        <strong>⚠️ Important :</strong> AUCUN élève ne doit créer de compte personnel sur une IA grand public.
+                    </div>
+                </div>
+
+                <button class="reveal-btn" onclick="revealDemo('demo3-2', this)"><i class="fas fa-laptop-code"></i> Afficher Démo 9 (Impact)</button>
+                <div id="demo3-2" class="demo-box">
+                    <h4><i class="fas fa-globe-americas"></i> Démo 9 : Impact environnemental</h4>
+                    <div class="tool-links">
+                        <a href="https://compareia.culture.gouv.fr/" target="_blank" class="tool-btn">
+                            <i class="fas fa-leaf"></i> Compare IA
+                            <span class="badge badge-french">🇫🇷</span>
+                        </a>
+                    </div>
+                    <p>Comparer l'empreinte carbone. 1 requête ChatGPT ≈ 10× Google.</p>
+                    <div class="info-learning info-box">
+                        <h4 class="font-bold mb-20" style="color: var(--amiral-teal);">🌱 Impact</h4>
+                        <ul class="learning-list">
+                            <!-- MODIFICATION CI-DESSOUS -->
+                            <li><span style="color: var(--amiral-cyan);">🌍</span> Énergie massive – Les modèles d’IA exigent une puissance de calcul très élevée, ce qui entraîne une consommation d’électricité importante pour faire fonctionner et entraîner les systèmes.</li>
+                            <li><span style="color: var(--amiral-cyan);">🌍</span> Eau pour data centers – Le refroidissement des serveurs nécessite souvent de grandes quantités d’eau, utilisée pour maintenir les infrastructures à une température stable et éviter la surchauffe.</li>
+                            <li><span style="color: var(--amiral-cyan);">🌍</span> Métaux rares – Le matériel informatique repose sur l’extraction de métaux rares comme le cobalt, le lithium ou les terres rares, dont l’exploitation a des conséquences environnementales et sociales non négligeables.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="cadre">
+                    <h3>📚 Usage frugal</h3>
+                    <p>"L'IA ne doit être utilisée que si aucune solution moins coûteuse ne suffit."
+                        <span class="ref-badge" onclick="openModal('ref13')">Cadre MEN p.8</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tuile Partie 4 -->
+        <div class="section-card" id="partie4">
+            <div class="section-header" onclick="toggleSection(this)">
+                <i class="amiral-icon fas fa-graduation-cap"></i>
+                <div class="section-header-content">
+                    <div class="section-number">PARTIE 4</div>
+                    <h2 class="section-title">Construction pédagogique</h2>
+                    <div class="section-meta">
+                        <span><i class="fas fa-hammer"></i> Créer une séquence</span>
+                    </div>
+                </div>
+                <div class="section-toggle"><i class="fas fa-chevron-down"></i></div>
+            </div>
+            <div class="section-content">
+                <div class="cadre">
+                    <h3>📚 Usages par niveau</h3>
+                    <ul>
+                        <li><strong>Primaire :</strong> <span class="highlight">sans manipulation</span>
+                            <span class="ref-badge" onclick="openModal('ref14')">Cadre MEN p.9</span>
+                        </li>
+                        <li><strong>4e :</strong> <span class="highlight">encadré</span>
+                            <span class="ref-badge" onclick="openModal('ref15')">Cadre MEN p.9</span>
+                        </li>
+                        <li><strong>Lycée :</strong> <span class="highlight">autonome</span>
+                            <span class="ref-badge" onclick="openModal('ref16')">Cadre MEN p.9</span>
+                        </li>
+                        <li><strong>Formation obligatoire Pix</strong>
+                            <span class="ref-badge" onclick="openModal('ref17')">Cadre MEN p.9</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <button class="reveal-btn" onclick="revealDemo('demo4-1', this)"><i class="fas fa-laptop-code"></i> Afficher Démo 10 (Corpus)</button>
+                <div id="demo4-1" class="demo-box">
+                    <h4><i class="fas fa-file-alt"></i> Démo 10 : Analyser un corpus (RAG)</h4>
+                    <div class="tool-links">
+                        <a href="https://chat.openai.com" target="_blank" class="tool-btn"><i class="fas fa-brain"></i> ChatGPT (Plus)</a>
+                        <a href="https://claude.ai" target="_blank" class="tool-btn"><i class="fas fa-comments"></i> Claude (Pro)</a>
+                    </div>
+                    <p>Uploader 3-4 documents sur l'IA.</p>
+                    <button class="prompt-toggle" onclick="togglePrompt('prompt-corpus')"><i class="fas fa-comment-alt"></i> Afficher Prompt d'analyse</button>
+                    <div id="prompt-corpus" class="prompt-box">
+                        <button class="copy-btn" onclick="copyText('prompt-corpus-text')"><i class="fas fa-copy"></i> Copier</button>
+                        <div id="prompt-corpus-text">À partir de ces documents sur l'IA, identifie 5 grands enjeux sociétaux et propose une problématique pour Terminale. 
+Pour chaque enjeu :1. Enjeu principal2. Compétence CRCN3. Exemple concret
+Format : Tableau</div>
+                    </div>
+                    <div class="info-learning info-box">
+                        <strong style="color: var(--amiral-teal);">💡 RAG :</strong> L'IA analyse VOTRE corpus spécifique plutôt que ses connaissances générales.
+                    </div>
+                </div>
+
+                <button class="reveal-btn" onclick="revealDemo('demo4-2', this)"><i class="fas fa-laptop-code"></i> Afficher Démos 11-14 : Workflow complet</button>
+                <div id="demo4-2" class="demo-box">
+                    <h4><i class="fas fa-bezier-curve"></i> Démos 11-14 : Créer une séquence complète</h4>
+                    
+                    <h5 style="color: var(--amiral-teal); margin: 25px 0 15px 0; font-weight: 700; font-size: 1.2em;"><i class="fas fa-search"></i> 1️⃣ Perplexity : Recherche documentaire</h5>
+                    <div class="tool-links">
+                        <a href="https://www.perplexity.ai/" target="_blank" class="tool-btn">
+                            🔍 Perplexity <span class="badge badge-free">Gratuit</span>
+                        </a>
+                    </div>
+                    <button class="prompt-toggle" onclick="togglePrompt('prompt-perplexity')"><i class="fas fa-comment-alt"></i> Afficher Prompt Perplexity</button>
+                    <div id="prompt-perplexity" class="prompt-box">
+                        <button class="copy-btn" onclick="copyText('prompt-perplexity-text')"><i class="fas fa-copy"></i> Copier</button>
+                        <div id="prompt-perplexity-text">Trouve-moi 2 articles sur l'IA avec des points de vue contraires (un optimiste, un critique) et une vidéo YouTube de moins de 5 minutes expliquant le fonctionnement de l'IA pour des lycéens.</div>
+                    </div>
+
+                    <h5 style="color: var(--amiral-teal); margin: 25px 0 15px 0; font-weight: 700; font-size: 1.2em;"><i class="fas fa-file-invoice"></i> 2️⃣ NotebookLM : Analyse et structure</h5>
+                    <div class="tool-links">
+                        <a href="https://notebooklm.google.com/" target="_blank" class="tool-btn">
+                            🎧 NotebookLM <span class="badge badge-free">Gratuit</span>
+                        </a>
+                    </div>
+                    <p>Uploader les documents trouvés et demander une trame de séquence pédagogique.</p>
+
+                    <h5 style="color: var(--amiral-teal); margin: 25px 0 15px 0; font-weight: 700; font-size: 1.2em;"><i class="fas fa-presentation"></i> 3️⃣ Gamma AI : Mise en forme</h5>
+                    <div class="tool-links">
+                        <a href="https://gamma.app/" target="_blank" class="tool-btn">
+                            📊 Gamma AI <span class="badge badge-freemium">Freemium</span>
+                        </a>
+                    </div>
+                    <p>Transformer la trame en présentation visuelle pour le cours.</p>
+
+                    <h5 style="color: var(--amiral-teal); margin: 25px 0 15px 0; font-weight: 700; font-size: 1.2em;"><i class="fas fa-clipboard-list"></i> 4️⃣ QuizWizard : Évaluation QCM</h5>
+                    <div class="tool-links">
+                        <a href="https://www.getquizwizard.com/" target="_blank" class="tool-btn">
+                            📝 QuizWizard <span class="badge badge-freemium">Freemium</span>
+                        </a>
+                    </div>
+                    <button class="prompt-toggle" onclick="togglePrompt('prompt-quizwizard')"><i class="fas fa-comment-alt"></i> Afficher Prompt QuizWizard</button>
+                    <div id="prompt-quizwizard" class="prompt-box">
+                        <button class="copy-btn" onclick="copyText('prompt-quizwizard-text')"><i class="fas fa-copy"></i> Copier</button>
+                        <div id="prompt-quizwizard-text">À partir du contenu de la séquence, génère 10 questions QCM sur les enjeux éthiques de l'IA pour des élèves de 2de, avec 4 choix et la bonne réponse indiquée.</div>
+                    </div>
+                    
+                    <div class="info-warning info-box">
+                        <strong>⚠️ Important :</strong> L'IA crée une <strong>BASE</strong>. L'enseignant doit <strong>PERSONNALISER</strong> et <strong>VÉRIFIER</strong>.
+                    </div>
+                </div>
+
+                <div class="info-learning info-box">
+                    <h4 class="font-bold mb-20" style="color: var(--amiral-teal);">🔧 Outils complémentaires</h4>
+                    <ul class="learning-list">
+                        <!-- MODIFICATION CI-DESSOUS -->
+                        <li><span style="color: var(--amiral-cyan);">🛠️</span> <strong>Diffit :</strong> Adapter et de différencier facilement les supports pédagogiques. - <a href="https://www.diffit.me/" target="_blank" style="color: var(--amiral-cyan); text-decoration: underline;">Visiter</a></li>
+                        <li><span style="color: var(--amiral-cyan);">🛠️</span> <strong>Consensus :</strong> Recherche scientifique - <a href="https://consensus.app/" target="_blank" style="color: var(--amiral-cyan); text-decoration: underline;">Visiter</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tuile Partie 5 -->
+        <div class="section-card" id="partie5">
+            <div class="section-header" onclick="toggleSection(this)">
+                <i class="amiral-icon fas fa-user-friends"></i>
+                <div class="section-header-content">
+                    <div class="section-number">PARTIE 5</div>
+                    <h2 class="section-title">IA et Élèves</h2>
+                    <div class="section-meta">
+                        <span><i class="fas fa-pen-fancy"></i> Évaluation</span>
+                    </div>
+                </div>
+                <div class="section-toggle"><i class="fas fa-chevron-down"></i></div>
+            </div>
+            <div class="section-content">
+                <div class="cadre">
+                    <h3>📚 Devoirs et fraude</h3>
+                    <ul>
+                        <li><strong>Utiliser l'IA sans autorisation = FRAUDE</strong>
+                            <span class="ref-badge" onclick="openModal('ref20')">Cadre MEN p.10</span>
+                        </li>
+                        <li><strong>Adapter les évaluations</strong>
+                            <span class="ref-badge" onclick="openModal('ref21')">Cadre MEN p.10</span>
+                        </li>
+                        <li><strong>Détecteurs NON fiables</strong>
+                            <span class="ref-badge" onclick="openModal('ref22')">Cadre MEN p.10</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <button class="reveal-btn" onclick="revealDemo('demo5-1', this)"><i class="fas fa-laptop-code"></i> Afficher Démo 15 (Détection)</button>
+                <div id="demo5-1" class="demo-box">
+                    <h4><i class="fas fa-eye"></i> Démo 15 : Repérer un texte IA</h4>
+                    <div class="info-learning info-box">
+                        <h4 class="font-bold mb-20" style="color: var(--amiral-teal);">🔍 Marqueurs possibles (PAS des preuves !)</h4>
+                        <!-- MODIFICATION DE LA LISTE CI-DESSOUS -->
+                        <ul class="learning-list">
+                            <li><span style="color: var(--amiral-cyan);">👉</span> Structure très régulière, transitions parfaites, phrases équilibrées et quasi-absence d’erreurs.</li>
+                            <li><span style="color: var(--amiral-cyan);">👉</span> Vocabulaire générique et exemples peu personnels ou interchangeables.</li>
+                            <li><span style="color: var(--amiral-cyan);">👉</span> Ton neutre, sans position claire ni émotion.</li>
+                            <li><span style="color: var(--amiral-cyan);">👉</span> Précision floue (ou au contraire trop parfaite) dans les faits.</li>
+                            <li><span style="color: var(--amiral-cyan);">👉</span> Répétitions discrètes d’idées ou de formulations.</li>
+                            <li><span style="color: var(--amiral-cyan);">👉</span> Changement soudain dans le style d’un élève, avec un niveau inattendu par rapport à ses productions habituelles.</li>
+                            <li><span style="color: var(--amiral-cyan);">👉</span> Citations ou sources douteuses.</li>
+                            <li><span style="color: var(--amiral-cyan);">👉</span> Mises en forme inhabituelles (tiret quadratin, titres en majuscules).</li>
+                        </ul>
+                    </div>
+                    <div class="info-warning info-box">
+                        <strong>⚠️ Important :</strong> Ces marqueurs ne prouvent <strong>RIEN</strong>. Ne <strong>PAS</strong> utiliser de détecteurs.
+                    </div>
+                </div>
+
+                <div class="info-learning info-box" style="margin-top: 30px;">
+                    <h4 class="font-bold mb-20" style="color: var(--amiral-teal);">✨ Transformer l'évaluation</h4>
+                    <ul class="learning-list">
+                        <li><span style="color: var(--amiral-cyan);">1️⃣</span> <strong>Évaluer le processus (demander le prompt)</strong></li>
+                        <!-- MODIFICATION CI-DESSOUS -->
+                        <li><span style="color: var(--amiral-cyan);">2️⃣</span> <strong>Consignes "IA-proof" :</strong> Des consignes qui résistent à l’IA grâce à des exemples ancrés dans le contexte réel de la classe.</li>
+                        <li><span style="color: var(--amiral-cyan);">3️⃣</span> <strong>Intégrer l'IA dans l'évaluation</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tuile Partie 6 -->
+        <div class="section-card" id="partie6">
+            <div class="section-header" onclick="toggleSection(this)">
+                <i class="amiral-icon fas fa-check-circle"></i>
+                <div class="section-header-content">
+                    <div class="section-number">SYNTHÈSE</div>
+                    <h2 class="section-title">Charte & Récapitulatif</h2>
+                    <div class="section-meta">
+                        <span><i class="fas fa-list-ul"></i> Bilan de la formation</span>
+                    </div>
+                </div>
+                <div class="section-toggle"><i class="fas fa-chevron-down"></i></div>
+            </div>
+            <div class="section-content">
+                <div class="cadre">
+                    <h3>📜 Charte d'usage de l'IA</h3>
+                    <ul>
+                        <li><strong>Enseignants :</strong> Vérifier, protéger, former</li>
+                        <li><strong>Élèves :</strong> Citer, vérifier, respecter</li>
+                    </ul>
+                </div>
+                <div class="info-learning info-box">
+                    <h4 class="font-bold mb-20" style="color: var(--amiral-teal);">🎯 L'essentiel</h4>
+                    <p style="font-size: 1.1em; line-height: 2;">
+                        L'IA est un <strong style="color: var(--amiral-cyan);">outil puissant</strong> au service de la pédagogie.<br>
+                        Elle doit être utilisée de manière <strong style="color: var(--amiral-cyan);">éclairée, critique et responsable</strong>.<br>
+                        L'enseignant reste <strong style="color: var(--amiral-cyan);">maître de ses choix pédagogiques</strong>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div> <!-- Fin .container -->
+
+    <!-- Modal pour les références -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title"></h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- SCRIPT JS -->
+    <script>
+        // Toggle Section
+        function toggleSection(header) {
+            const card = header.parentElement;
+            
+            // 1. Gérer l'expansion/fermeture de la carte cliquée
+            const isExpanding = !card.classList.contains('expanded');
+            
+            // 2. Fermer toutes les autres cartes
+            document.querySelectorAll('.section-card').forEach(otherCard => {
+                otherCard.classList.remove('expanded');
+            });
+            
+            // 3. Ouvrir la carte cliquée si elle était en train de s'ouvrir
+            if (isExpanding) {
+                card.classList.add('expanded');
+                
+                // NOUVEAU : Fait défiler l'écran vers le haut de la tuile pour l'accessibilité
+                setTimeout(() => {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100); 
+            }
+        }
+
+
+        // Reveal Demo - Gère l'affichage/masquage d'une seule démo à la fois
+        function revealDemo(demoId, button) { // Ligne 1906
+            const demo = document.getElementById(demoId);
+            const is_active = demo.classList.contains('active');
+
+            const findOriginalText = (btn) => { // Ligne 1910
+                // Utilise le dataset pour stocker le texte original si possible, sinon essaie de déduire
+                const originalText = btn.dataset.originalText || btn.innerText.replace('✓ Affiché', ' Afficher').trim();
+                btn.dataset.originalText = originalText; // Stocke l'original
+                
+                let iconClass = "fas fa-laptop-code"; // Default
+                if (originalText.includes('progressifs')) {
+                    iconClass = "fas fa-chart-bar";
+                } else if (originalText.includes('Détection')) {
+                    iconClass = "fas fa-eye";
+                } else if (originalText.includes('Texte simple')) {
+                    iconClass = "fas fa-laptop-code";
+                } else if (originalText.includes('structuré')) {
+                    iconClass = "fas fa-laptop-code";
+                } else if (originalText.includes('Visualisation')) {
+                    iconClass = "fas fa-laptop-code";
+                } else if (originalText.includes('Création d\'images')) {
+                    iconClass = "fas fa-laptop-code";
+                } else if (originalText.includes('Workflow')) {
+                    iconClass = "fas fa-laptop-code";
+                }
+
+                return { text: originalText, iconHtml: `<i class="${iconClass}"></i> ` }; // Ligne 1930
+            };
+
+            // 1. Cacher toutes les autres démos et réinitialiser les boutons de cette section
+            const currentSection = button.closest('.section-content');
+            currentSection.querySelectorAll('.demo-box').forEach(d => {
+                if (d.id !== demoId) {
+                    d.classList.remove('active');
+                }
+            });
+            currentSection.querySelectorAll('.reveal-btn').forEach(b => {
+                if (b !== button) {
+                    b.classList.remove('used');
+                    const { text, iconHtml } = findOriginalText(b);
+                    b.innerHTML = iconHtml + text;
+                }
+            });
+
+            // 2. Ouvrir/Fermer la démo actuelle
+
+            // FIX : Appeler findOriginalText pour le bouton actuel AVANT d'essayer de lire son dataset
+            const { text: originalText, iconHtml } = findOriginalText(button);
+
+            if (!is_active) {
+                demo.classList.add('active');
+                button.classList.add('used');
+                // const originalText = button.dataset.originalText; // Ligne 1952 (buggée)
+                
+                // Remplacement plus sûr en utilisant les variables récupérées
+                button.innerHTML = `${iconHtml} ✓ Affiché ${originalText.replace('Afficher ', '')}`; // Ligne 1953 (Corrigée)
+            } else {
+                demo.classList.remove('active'); // Permet de fermer
+                button.classList.remove('used');
+                // const { text, iconHtml } = findOriginalText(button); // Déplacé vers le haut
+                button.innerHTML = iconHtml + originalText;
+            }
+        }
+
+        // Toggle Prompt
+        function togglePrompt(id) {
+            const prompt = document.getElementById(id);
+            prompt.classList.toggle('show');
+        }
+
+        // Copy Text
+        function copyText(id) {
+            const text = document.getElementById(id).innerText;
+            // Utiliser execCommand('copy') pour une compatibilité maximale dans les iframes
+            const tempInput = document.createElement('textarea');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            tempInput.setSelectionRange(0, 99999); // Pour mobile
+            
+            let success = false;
+            try {
+                success = document.execCommand('copy');
+            } catch (err) {
+                console.error('Erreur lors de la copie', err);
+            }
+            
+            document.body.removeChild(tempInput);
+
+            // Notification visuelle
+            const copyButton = document.querySelector(`[onclick="copyText('${id}')"]`);
+            if (copyButton && success) {
+                const originalContent = copyButton.innerHTML;
+                copyButton.innerHTML = '<i class="fas fa-check"></i> Copié !';
+                copyButton.style.background = 'var(--amiral-teal)';
+                setTimeout(() => {
+                    copyButton.innerHTML = originalContent;
+                    copyButton.style.background = 'var(--amiral-accent-orange)';
+                }, 1500);
+            }
+        }
+
+        // Modal References (Contenu inchangé)
+        const refs = {
+            ref1: { title: "Cadre MEN p.3", content: '<blockquote>"L\'enseignant reste responsable des contenus utilisés."</blockquote>' },
+            ref2: { title: "Cadre MEN p.8", content: '<blockquote>"L\'IA peut assister mais jamais remplacer l\'enseignant."</blockquote>' },
+            ref6: { title: "Cadre MEN p.7", content: '<blockquote>"Les élèves doivent développer un esprit critique."</blockquote>' },
+            ref7: { title: "Cadre MEN p.7", content: '<blockquote>"Les IA peuvent reproduire et amplifier des biais."</blockquote>' },
+            ref8: { title: "Cadre MEN p.8", content: '<blockquote>"Aucune donnée personnelle ne doit être saisie."</blockquote>' },
+            ref9: { title: "Cadre MEN p.4-5", content: '<blockquote>"Privilégier des comptes génériques."</blockquote>' },
+            ref13: { title: "Cadre MEN p.8", content: '<blockquote>"Usage frugal de l\'IA."</blockquote>' },
+            ref14: { title: "Cadre MEN p.9", content: '<blockquote>"Primaire : sensibilisation sans manipulation."</blockquote>' },
+            ref15: { title: "Cadre MEN p.9", content: '<blockquote>"4e : utilisation encadrée."</blockquote>' },
+            ref16: { title: "Cadre MEN p.9", content: '<blockquote>"Lycée : utilisation autonome."</blockquote>' },
+            ref17: { title: "Cadre MEN p.9", content: '<blockquote>"Formation obligatoire sur Pix."</blockquote>' },
+            ref20: { title: "Cadre MEN p.10", content: '<blockquote>"Utiliser l\'IA sans autorisation = FRAUDE."</blockquote>' },
+            ref21: { title: "Cadre MEN p.10", content: '<blockquote>"Adapter l\'évaluation."</blockquote>' },
+            ref22: { title: "Cadre MEN p.10", content: '<blockquote>"Détecteurs d\'IA non fiables."</blockquote>' }
+        };
+
+        function openModal(refId) {
+            const modal = document.getElementById('modal');
+            const ref = refs[refId];
+            if (ref) {
+                document.getElementById('modal-title').textContent = ref.title;
+                document.getElementById('modal-body').innerHTML = ref.content;
+                modal.classList.add('show');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('show');
+        }
+
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // Progress bar
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const progress = (scrollTop / scrollHeight) * 100;
+            
+            document.getElementById('progressBar').style.width = progress + '%';
+        });
+        
+        // S'assurer que les icônes de chevron sont bien FA
+        document.querySelectorAll('.section-toggle').forEach(el => {
+            el.innerHTML = '<i class="fas fa-chevron-down"></i>';
+        });
+
+    </script>
+
+</body>
+</html>
