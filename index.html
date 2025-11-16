@@ -14,8 +14,8 @@
         /* --- PALETTE & BASE (Style Amiral Amélioré) --- */
         :root {
             --amiral-blue-dark: #0A3D62; /* Bleu foncé principal (Texte, Hero) */
-            --amiral-cyan: #0672A4;      /* Cyan (Accents, liens) */
-            --amiral-teal: #00A69D;      /* Teal (Tuile active, icônes) */
+            --amiral-cyan: #0672A4;     /* Cyan (Accents, liens) */
+            --amiral-teal: #00A69D;     /* Teal (Tuile active, icônes) */
             --amiral-accent-orange: #F47216; /* ACCENT ORANGE VIF */
             --amiral-light-bg: #F7F9FA;  /* Fond de page très clair */
             --amiral-card-bg: #FFFFFF;    /* Fond des tuiles */
@@ -69,6 +69,10 @@
             width: 120px; /* Ajustez la taille si besoin */
             height: auto;
             opacity: 0.9;
+            
+            /* --- MODIFICATION AJOUTÉE --- */
+            border-radius: 12px; /* Arrondit les angles du logo (vous pouvez ajuster la valeur) */
+            /* --- FIN MODIFICATION --- */
         }
 
         .hero h1 {
@@ -165,8 +169,8 @@
 
         /* Icônes de Tuile */
         .section-header i.amiral-icon {
-            font-size: 2.5em; 
-            margin-right: 25px; 
+            font-size: 2.5em;  
+            margin-right: 25px;  
             color: var(--amiral-teal);
             transition: color 0.3s ease, transform 0.3s ease;
             transform: scale(1);
@@ -199,7 +203,7 @@
             font-size: 1.8em;
             font-weight: 700;
             margin-bottom: 5px;
-        }             
+        }           
         .section-meta {
             font-size: 0.9em;
             opacity: 0.8;
@@ -249,7 +253,7 @@
             font-size: 1.4em;
             margin-bottom: 15px;
             color: var(--amiral-teal);
-        }                
+        }           
         .cadre ul { list-style: none; padding-left: 0; }
         .cadre li {
             padding-left: 25px;
@@ -277,8 +281,8 @@
             font-weight: 600;
             transition: background 0.2s ease, transform 0.2s ease;
         }
-        .ref-badge:hover { 
-            background: var(--amiral-blue-dark); 
+        .ref-badge:hover {  
+            background: var(--amiral-blue-dark);  
             transform: translateY(-1px);
         }
 
@@ -290,26 +294,26 @@
             font-size: 0.95em;
             box-shadow: 0 2px 4px rgba(0,0,0,0.03);
         }
-        .info-formateur { 
-            background: #FFFBF0; 
+        .info-formateur {  
+            background: #FFFBF0;  
             border-color: var(--amiral-accent-orange);
-            color: #92400E; 
+            color: #92400E;  
         }
-        .info-learning { 
-            background: #F0F4FF; 
+        .info-learning {  
+            background: #F0F4FF;  
             border-color: var(--amiral-cyan);
-            color: var(--amiral-blue-dark); 
+            color: var(--amiral-blue-dark);  
         }
-        .info-warning { 
-            background: #FFF0F0; 
+        .info-warning {  
+            background: #FFF0F0;  
             border-color: #E53E3E;
             color: #C53030; /* Plus foncé pour contraste */
         }
 
         .learning-list { list-style: none; padding-left: 0; }
-        .learning-list li { 
+        .learning-list li {  
             padding: 8px 0 8px 30px; /* Plus d'espace */
-            border-bottom: 1px dashed rgba(10, 61, 98, 0.1); 
+            border-bottom: 1px dashed rgba(10, 61, 98, 0.1);  
             position: relative;
         }
         .learning-list li span {
@@ -334,7 +338,7 @@
             /* Ombre 3D améliorée */
             box-shadow: 0 5px 0px #CC5E12, 0 8px 10px rgba(0,0,0,0.1);
             margin: 20px 0;
-            display: flex; 
+            display: flex;  
             align-items: center;
             justify-content: center;
             width: 100%;
@@ -342,14 +346,14 @@
         }
         .reveal-btn i { margin-right: 10px; font-size: 1.1em; }
 
-        .reveal-btn:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 7px 0px #CC5E12, 0 10px 12px rgba(0,0,0,0.15); 
+        .reveal-btn:hover {  
+            transform: translateY(-2px);  
+            box-shadow: 0 7px 0px #CC5E12, 0 10px 12px rgba(0,0,0,0.15);  
             filter: brightness(1.05);
         }
-        .reveal-btn:active { 
-            transform: translateY(4px); 
-            box-shadow: 0 1px 0px #CC5E12, 0 2px 4px rgba(0,0,0,0.1); 
+        .reveal-btn:active {  
+            transform: translateY(4px);  
+            box-shadow: 0 1px 0px #CC5E12, 0 2px 4px rgba(0,0,0,0.1);  
             filter: brightness(0.95);
         }
 
@@ -359,13 +363,13 @@
             box-shadow: 0 5px 0px #083451, 0 8px 10px rgba(0,0,0,0.1);
             cursor: default;
         }
-        .reveal-btn.used:hover { 
+        .reveal-btn.used:hover {  
             transform: translateY(-2px); /* Garder l'effet de survol */
-            box-shadow: 0 7px 0px #083451, 0 10px 12px rgba(0,0,0,0.15); 
+            box-shadow: 0 7px 0px #083451, 0 10px 12px rgba(0,0,0,0.15);  
         }
-        .reveal-btn.used:active { 
-            transform: translateY(4px); 
-            box-shadow: 0 1px 0px #083451, 0 2px 4px rgba(0,0,0,0.1); 
+        .reveal-btn.used:active {  
+            transform: translateY(4px);  
+            box-shadow: 0 1px 0px #083451, 0 2px 4px rgba(0,0,0,0.1);  
         }
 
         /* Demo Box */
@@ -409,8 +413,8 @@
             transition: all 0.2s;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .prompt-toggle:hover { 
-            background: var(--amiral-teal); 
+        .prompt-toggle:hover {  
+            background: var(--amiral-teal);  
             transform: translateY(-1px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
@@ -477,11 +481,11 @@
             text-decoration: none; /* Annuler le soulignement du hover */
         }
 
-        .tool-btn:hover { 
-              background: var(--amiral-teal); 
-              transform: translateY(-2px); 
-              box-shadow: 0 5px 10px rgba(0,0,0,0.15); /* Effet de profondeur au survol */
-              text-decoration: none;
+        .tool-btn:hover {  
+             background: var(--amiral-teal);  
+             transform: translateY(-2px);  
+             box-shadow: 0 5px 10px rgba(0,0,0,0.15); /* Effet de profondeur au survol */
+             text-decoration: none;
         }
 
         .badge {
@@ -498,14 +502,14 @@
         .badge-french { background: #0055A4; } /* Bleu drapeau FR */
         .badge-freemium { background: var(--amiral-blue-dark); }
         
-        .highlight { 
+        .highlight {  
             background: var(--amiral-accent-orange);
             color: white;
-            padding: 2px 6px; 
-            border-radius: 4px; 
-            font-weight: 700; 
+            padding: 2px 6px;  
+            border-radius: 4px;  
+            font-weight: 700;  
         }
-        .font-bold { font-weight: 800; color: var(--amiral-teal); }              
+        .font-bold { font-weight: 800; color: var(--amiral-teal); }             
         
         /* --- MODAL (Référence MEN) --- */
         .modal {
@@ -519,22 +523,22 @@
         .modal-content {
             background-color: var(--amiral-card-bg); margin: 10% auto; padding: 30px;
             border-radius: 16px; width: 90%; max-width: 550px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);  
             animation: slideInModal 0.3s ease-out;
         }
-        .modal-header { 
-            border-bottom: 2px solid var(--amiral-teal); 
-            padding-bottom: 12px; 
-            margin-bottom: 20px; 
-            display: flex; justify-content: space-between; align-items: center; 
+        .modal-header {  
+            border-bottom: 2px solid var(--amiral-teal);  
+            padding-bottom: 12px;  
+            margin-bottom: 20px;  
+            display: flex; justify-content: space-between; align-items: center;  
         }
         #modal-title { color: var(--amiral-teal); font-size: 1.6em; font-weight: 700; }
-        .modal-close { 
-            color: #aaa; 
-            font-size: 32px; 
-            font-weight: bold; 
-            border: none; background: none; 
-            cursor: pointer; 
+        .modal-close {  
+            color: #aaa;  
+            font-size: 32px;  
+            font-weight: bold;  
+            border: none; background: none;  
+            cursor: pointer;  
             transition: color 0.2s, transform 0.2s;
         }
         .modal-close:hover { color: var(--amiral-blue-dark); transform: rotate(90deg); }
@@ -559,15 +563,15 @@
             .hero h1 { font-size: 2.2em; }
             
             .section-title { font-size: 1.5em; }
-            .section-header { 
+            .section-header {  
                 grid-template-columns: 1fr auto; /* Retirer l'icône de la grille pour le mobile */
-                padding: 20px 25px; 
-                flex-direction: column; 
-                align-items: flex-start; 
+                padding: 20px 25px;  
+                flex-direction: column;  
+                align-items: flex-start;  
             }
-            .section-header i.amiral-icon { 
+            .section-header i.amiral-icon {  
                 /* L'icône est retirée du flux principal sur mobile pour simplifier l'alignement */
-                display: none; 
+                display: none;  
             }
             .section-header-content { width: 100%; }
             .section-meta { margin-top: 10px; }
